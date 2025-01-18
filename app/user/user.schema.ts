@@ -12,7 +12,7 @@ const UserSchema = new Schema<IUser>({
         last_name:{ type: String, required: true },
         email:{ type: String, required: true },
         mobile: { type: String, required: true },
-        address :{type:String ,required:true , unique:true},
+        address :{type:String ,required:true},
         postalCode: { type: Schema.Types.ObjectId, ref: 'Address', required: true },
 }, { timestamps: true });
 
