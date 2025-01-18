@@ -19,10 +19,10 @@ export const createAddress = asyncHandler(async (req: Request, res: Response) =>
 //     res.send(createResponse(result, "User updated sucssefully"))
 // });
 
-// export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
-//     const result = await userService.deleteUser(req.params.id);
-//     res.send(createResponse(result, "User deleted sucssefully"))
-// });
+export const deleteAddress = asyncHandler(async (req: Request, res: Response) => {
+    const result = await addressService.deleteAddress(req.params.id);
+    res.send(createResponse(result, "User deleted sucssefully"))
+});
 
 
 // export const getUserById = asyncHandler(async (req: Request, res: Response) => {

@@ -10,7 +10,7 @@ const router = Router();
 router
         .get("/", addressController.getAddress)
         // .get("/:id", addressController.getUserById)
-        // .delete("/:id", addressController.deleteUser)
+        .delete("/:id", addressController.deleteAddress)
         .post("/",roleAuth("ADMIN"),addressValidation.createAddress, catchError, addressController.createAddress)
         // .put("/:id", addressValidation.createAddress, catchError, addressController.)
 
