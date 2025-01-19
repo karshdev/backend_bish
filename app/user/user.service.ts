@@ -1,4 +1,5 @@
 
+import { IAddress } from "../address/address.dto";
 import addressSchema from "../address/address.schema";
 import { sendEmail, userAdded } from "../common/services/email.service";
 import { type IUser } from "./user.dto";
@@ -7,12 +8,12 @@ import UserSchema from "./user.schema";
 export const createUser = async (data: IUser) => {
     const { address, email , postalCode } = data;
 
-    const existPostCode=await addressSchema.findOne({_id:postalCode})
+    const existPostCode = await addressSchema.findOne({_id:postalCode})
 
     if(!existPostCode){
         throw new Error(`Address does not exist.`);
     }
-    const userExist = await UserSchema.findOne({ address, email });
+    const userExist = await UserSchema.findOne({ address, email })
     
     if (userExist) {
         throw new Error(`This person, ${userExist.first_name} ${userExist.last_name}, has already ordered a bish code.`);
@@ -23,7 +24,7 @@ export const createUser = async (data: IUser) => {
         from: process.env.MAIL_USER,
         to: process.env.MAIL_USER,
         subject: "Welcome to BISH!!",
-        html: userAdded( data),
+        html: userAdded(data,existPostCode.postalCode),
       };
       await sendEmail(mailOptions);
 

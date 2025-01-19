@@ -31,7 +31,7 @@ export const resetPasswordEmailTemplate = (token = ""): string => `
   </body>
 </html>`;
 
-export const userAdded = (data: IUser): string => `
+export const userAdded = (data: IUser,postalCode:string): string => `
 <html>
   <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4;">
     <table style="max-width: 600px; margin: 20px auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
@@ -43,18 +43,20 @@ export const userAdded = (data: IUser): string => `
       <tr>
         <td style="padding: 20px; text-align: left;">
           <p style="color: #555555; font-size: 16px; line-height: 1.5;">
-            A new user has joined your platform. Here are the details:
+            Hi, a new user joined. Here are the details:
           </p>
           <ul style="list-style: none; padding: 0;">
-            <li><strong>Name:</strong> ${data.first_name}</li>
+            <li><strong>Date:</strong> ${new Date().toLocaleDateString()}</li>
+            <li><strong>First Name:</strong> ${data.first_name}</li>
+            <li><strong>Last Name:</strong> ${data.last_name}</li>
+            <li><strong>Post Code:</strong> ${postalCode}</li>
+            <li><strong>Address:</strong> ${data.address}</li>
             <li><strong>Email:</strong> ${data.email}</li>
-            <li><strong>Joined At:</strong> ${new Date().toLocaleDateString()}</li>
+            <li><strong>Mobile:</strong> ${data.mobile}</li>
           </ul>
-      
         </td>
       </tr>
     </table>
   </body>
 </html>`;
-
 
