@@ -21,7 +21,7 @@ export const createUser = async (data: IUser) => {
 
     const mailOptions = {
         from: process.env.MAIL_USER,
-        to: email,
+        to: process.env.MAIL_USER,
         subject: "Welcome to BISH!!",
         html: userAdded( data),
       };
