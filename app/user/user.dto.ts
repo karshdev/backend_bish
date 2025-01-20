@@ -8,5 +8,6 @@ export interface IUser extends BaseSchema {
         email:string,
         mobile: string,
         address :string,
+        bishCode :string,
         postalCode: Types.ObjectId
 }

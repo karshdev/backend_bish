@@ -1,13 +1,12 @@
 
-import { IAddress } from "../address/address.dto";
 import addressSchema from "../address/address.schema";
 import { sendEmail, userAdded } from "../common/services/email.service";
+import { generateBishCode, sendSequentialSMS } from "../common/services/sms.service";
 import { type IUser } from "./user.dto";
 import UserSchema from "./user.schema";
 
 export const createUser = async (data: IUser) => {
     const { address, email , postalCode } = data;
-
     const existPostCode = await addressSchema.findOne({_id:postalCode})
 
     if(!existPostCode){
@@ -17,9 +16,11 @@ export const createUser = async (data: IUser) => {
     
     if (userExist) {
         throw new Error(`This person, ${userExist.first_name} ${userExist.last_name}, has already ordered a bish code.`);
-       
     }
 
+   const bishCode = generateBishCode();
+   const send=await sendSequentialSMS(data.mobile,bishCode)
+  
     const mailOptions = {
         from: process.env.MAIL_USER,
         to: process.env.MAIL_USER,
@@ -28,7 +29,7 @@ export const createUser = async (data: IUser) => {
       };
       await sendEmail(mailOptions);
 
-    const result = await UserSchema.create({ ...data });
+    const result = await UserSchema.create({ ...data , bishCode });
     return result;
 };
 

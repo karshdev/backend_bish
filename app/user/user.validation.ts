@@ -20,11 +20,11 @@ export const createUser = [
     .notEmpty()
     .withMessage('Email is required'),
 
-  body('mobile')
-    .matches(/^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/)
-    .withMessage('Mobile must be a valid UK phone number starting with +44 or 07')
-    .notEmpty()
-    .withMessage('Mobile number is required'),
+  // body('mobile')
+  //   .matches(/^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/)
+  //   .withMessage('Mobile must be a valid UK phone number starting with +44 or 07')
+  //   .notEmpty()
+  //   .withMessage('Mobile number is required'),
 
   body('address')
     .isString()
