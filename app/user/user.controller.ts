@@ -9,6 +9,11 @@ export const createUser = asyncHandler(async (req: Request, res: Response) => {
     res.send(createResponse(result, "User created successfully"))
 });
 
+export const getDashboardData = asyncHandler(async (req: Request, res: Response) => {
+    const result = await userService.getUserData();
+    res.send(createResponse(result, "User fetched successfully"))
+});
+
 // export const updateUser = asyncHandler(async (req: Request, res: Response) => {
 //     const result = await userService.updateUser(req.params.id, req.body);
 //     res.send(createResponse(result, "User updated sucssefully"))

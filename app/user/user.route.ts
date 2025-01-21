@@ -12,6 +12,8 @@ router
         // .get("/:id", userController.getUserById)
         // .delete("/:id", userController.deleteUser)
         .post("/", userValidator.createUser, catchError, userController.createUser)
+        .get("/users", roleAuth("ADMIN"), userController.getDashboardData)
+
         // .put("/:id", userValidator.updateUser, catchError, userController.updateUser)
         // .patch("/:id", userValidator.editUser, catchError, userController.editUser)
 

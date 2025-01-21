@@ -1,4 +1,5 @@
 
+import mongoose from "mongoose";
 import addressSchema from "../address/address.schema";
 import { sendEmail, userAdded } from "../common/services/email.service";
 import { generateBishCode, sendSequentialSMS } from "../common/services/sms.service";
@@ -36,6 +37,88 @@ export const createUser = async (data: IUser) => {
 export const getAllUser = async () => {
     const result = await UserSchema.find({}).populate("postalCode").lean();
     return result;
+};
+export const getUserData = async () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    try {
+        const aggregateResult = await mongoose.model<IUser>("user").aggregate([
+            {
+                $facet: {
+                    newUsers: [
+                        {
+                            $match: {
+                                createdAt: {
+                                    $gte: today
+                                }
+                            }
+                        },
+                        {
+                            $count: "count"
+                        }
+                    ],
+                    totalUsers: [
+                        {
+                            $match: {
+                                // Add any active user criteria here if needed
+                                // For example, if you want to count users who have logged in recently:
+                                // lastLoginDate: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
+                            }
+                        },
+                        {
+                            $count: "count"
+                        }
+                    ],
+                    recentUsers: [
+                        {
+                            $match: {
+                                createdAt: {
+                                    $gte: today
+                                }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "addresses",
+                                localField: "postalCode",
+                                foreignField: "_id",
+                                as: "addressDetails"
+                            }
+                        },
+                        {
+                            $project: {
+                                first_name: 1,
+                                last_name: 1,
+                                email: 1,
+                                mobile: 1,
+                                address: 1,
+                                bishCode: 1,
+                                createdAt: 1,
+                                "addressDetails.postalCode": 1
+                            }
+                        },
+                        {
+                            $sort: { createdAt: -1 }
+                        },
+                        {
+                            $limit: 10
+                        }
+                    ]
+                }
+            }
+        ]);
+
+        const result = {
+            newUsersToday: aggregateResult[0].newUsers[0]?.count || 0,
+            totalActiveUsers: aggregateResult[0].totalUsers[0]?.count || 0,
+            recentUsers: aggregateResult[0].recentUsers || []
+        };
+
+        return result;
+    } catch (error:any) {
+        throw new Error(`Error fetching user dashboard data: ${error.message}`);
+    }
 };
 
 // export const updateUser = async (id: string, data: IUser) => {
